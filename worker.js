@@ -5,7 +5,7 @@ function getMessage() {
   
   var result = null;
   x.onload = function(e) {
-    //console.log('worker.js x.onload:' + e.target.response);
+    console.log('worker.js x.onload:' + e.target.response);
     result = e.target.response;
   }
   x.send(null);

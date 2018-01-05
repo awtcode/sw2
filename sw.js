@@ -1,13 +1,15 @@
+console.log("sw.js initialized!!!");
 var messages = [];
 self.addEventListener('fetch', function(e) {
   //console.log('fetch:' + e.request.url);
   if (e.request.url.endsWith('timeout')) {
     var result = (messages.length > 0) ? messages : null;
-    //console.log("sw.js: msg:" + result + " length:" + messages.length);
+    
     e.respondWith(new Promise(function(accept, reject) {
        setTimeout(function() {
-         accept(new Response(result));
-         messages = [];
+         console.log("sw.js: sending back to worker.js msg:" + result + " length:" + messages.length);
+          accept(new Response(result));
+         //messages = [];
        }, 1000);
      }));
   } else {
