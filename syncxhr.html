@@ -1,0 +1,17 @@
+<html>
+  <body>
+  <script>
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
+      var w = new Worker('worker.js');
+      var count = 0;
+      setInterval(function(){ 
+        if (navigator.serviceWorker.controller !== null) {
+          navigator.serviceWorker.controller.postMessage("message from main thread no:" + (count++)); 
+        } else {
+          console.log("syncxhr.html navigator.serviceWorker.controller is null!!!");
+        }
+      }, 3000);
+    });
+  </script>
+  </body>
+</html>
