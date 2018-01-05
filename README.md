@@ -10,5 +10,6 @@ Known Issues:
 2. Do not clear the messages array in sw.js for now as the Web Worker gets a null response. Find a way to clear the messages after the Web Worker has received them.
 
 Run:
-Simply start a node or python server and observe the printouts in the Chrome console. 
+1. Simply start a node or python server
+2. Observe the printouts in the Chrome console. 
 
