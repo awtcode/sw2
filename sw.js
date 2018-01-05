@@ -9,7 +9,7 @@ self.addEventListener('fetch', function(e) {
        setTimeout(function() {
          console.log("sw.js: sending back to worker.js msg:" + result + " length:" + messages.length);
           accept(new Response(result));
-         //messages = [];
+         //messages = []; // Do not clear the messsages for now, it voids the result in worker.js!!!
        }, 1000);
      }));
   } else {
