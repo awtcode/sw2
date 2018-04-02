@@ -8,22 +8,7 @@ function getMessage() {
   var result = [];
   x.onload = function(e) {
     if (e.target.response) {
-        var messages = new Uint8Array(e.target.response)
-        var messagesLength = messages.length;
-        var currIdx = 0;
-        var enc = new TextDecoder("utf-8");
-    
-        while (messagesLength > currIdx) {
-            var view = new DataView(messages.buffer, currIdx);
-            var messageLength = view.getUint32();
-            // Get the binary rep of the msg
-            currIdx += 4;
-            var message = messages.slice(currIdx, currIdx + messageLength);
-            currIdx += messageLength;
-            var str = enc.decode(message);
-            var obj = JSON.parse(str);
-            result.push(obj);
-        }
+       result.push[e.target.response];
     } else {
       console.log('response is null');
     }
