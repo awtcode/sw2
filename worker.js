@@ -1,30 +1,52 @@
 // Do the actual work of getting a message
+console.log('worker.js launched');
 function getMessage() {
   var x = new XMLHttpRequest();
   x.open('GET', '/sleep/timeout', false);
-  
-  var result = null;
+  //x.responseType = "arraybuffer";
+
+  var result = [];
   x.onload = function(e) {
-    console.log('worker.js x.onload:' + e.target.response);
-    result = e.target.response;
+    if (e.target.response) {
+        var messages = new Uint8Array(e.target.response)
+        var messagesLength = messages.length;
+        var currIdx = 0;
+        var enc = new TextDecoder("utf-8");
+    
+        while (messagesLength > currIdx) {
+            var view = new DataView(messages.buffer, currIdx);
+            var messageLength = view.getUint32();
+            // Get the binary rep of the msg
+            currIdx += 4;
+            var message = messages.slice(currIdx, currIdx + messageLength);
+            currIdx += messageLength;
+            var str = enc.decode(message);
+            var obj = JSON.parse(str);
+            result.push(obj);
+        }
+    } else {
+      console.log('response is null');
+    }
   }
+  console.log('worker.js send+');
   x.send(null);
-  //console.log("worker.js: send- result: " + result);
+  console.log("worker.js: send- result: " + result);
   return result;
 }
 
-// Simulates Fabric's subReceiveMessage. Do busy-waiting, do not proceed until we get a message
+// Do busy-waiting, do not proceed until we get a message
 function subReceiveMessage() {
   do {
     var message = getMessage();
-    if (message) {
+    if (message.length > 0) {
       console.log("worker.js receive msg:" + message);
       return message;
     }
   } while (1);
 }
 
-(function fabricStart() {
+(function workerStart() {
+  console.log('workerStart+');
   for (;;) {
     do {
     var message = subReceiveMessage();

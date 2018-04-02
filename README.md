@@ -1,6 +1,6 @@
 "# syncxhr" 
 
-A very simple prototype to support Fabric's messaging requirements without SharedArrayBuffers or Emterpreter. The requirements include the following:
+A very simple prototype to support messaging requirements without SharedArrayBuffers or Emterpreter. The requirements include the following:
 
 1. Able to receive messsages on a Web Worker in a blocking while loop.
 2. Able to coalesce group of messages to improve performance
