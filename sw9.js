@@ -32,10 +32,10 @@ self.addEventListener('fetch', function(e) {
 
 self.onmessage = function(event) {
   if (event.data === 'claim') {
-    console.log('sw.js claiming clients');
+    // console.log('sw.js claiming clients');
     clients.claim();
   }
-  console.log("sw.js receive from syncxhr.html data:" + event.data);
+  console.log(`sw.js receive from syncxhr.html with sourceid "${event.source.id}" And with data: "${event.data}"`);
   messages.push(event.data);
 }
 
