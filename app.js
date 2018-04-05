@@ -1,24 +1,3 @@
-// navigator.serviceWorker.oncontrollerchange = function() {
-//     console.log("syncxhr.html navigator.serviceWorker.oncontrollerchange activated!!!");
-// }
-
-// navigator.serviceWorker.register('sw.js').then  (function(reg) {
-//       var w = new Worker('worker.js');
-//       var count = 0;
-//       //setInterval(function(){ 
-//         if (navigator.serviceWorker.controller !== null) {
-//             var obj = {};
-//             obj.index = count;
-//           navigator.serviceWorker.controller.postMessage(obj); 
-//           console.log("syncxhr.html navigator.serviceWorker.controller NOT null!!!");
-//         } else {
-//           console.log("syncxhr.html navigator.serviceWorker.controller is null!!!");
-//           window.location.reload(true);
-//         }
-//       //}, 3000);
-//     }).catch(function(e) {
-//       console.log(e);
-//     });
 var _reg = null;
 function init() {    
     return new Promise((resolve, reject) => {
@@ -59,16 +38,36 @@ function init() {
         });
     });
 }
+let _resolveId = null;
+let _winId = null;
+async function getId() {    
+    _reg.active.postMessage('resolveId');
+    return new Promise((resolve, reject) => {
+        _resolveId = resolve;
+    })
+}
+async function handleResolve() {
+    console.log('SW is activated!!! proceed');
+        await getId().then((winId) => {
+            console.log('winId resolved:' + winId);
+            _resolveId = winId;
+        });
+}
 
 async function main() {
-    await init().then(function() {
-        //window.location.reload(true);
-        console.log('SW is activated!!! proceed');
-        var w = new Worker('worker.js');
-        _reg.active.postMessage('from app.js to worker.js');
-    }, function() {
+    await init().then(handleResolve, function() {
         //window.location.reload(true);
     })
+    console.log('Creating worker with winId:' + _resolveId);
+    let w = new Worker('worker.js');
+    //w.postMessage({eventType:'initWndId', wndId:_winId});
+    w.postMessage("testtest");
 }
 
 main();
+
+navigator.serviceWorker.addEventListener('message', function(e) {
+    if (e.data.resolveIdDone = 1) {
+        _resolveId(e.data.winId);    
+    }
+});

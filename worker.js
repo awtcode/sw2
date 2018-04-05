@@ -30,17 +30,26 @@ function subReceiveMessage() {
   } while (1);
 }
 
-(function workerStart() {
-  console.log('workerStart+');
-  for (;;) {
-    do {
-    var message = subReceiveMessage();
-    if (message) {
-      console.log("worker.js receive msg:" + message);
-      break;
-    }
-  } while (1);
-  console.log("worker.js msg received!!! exit while loop!!!");
-  }  
-})();
+// (function workerStart() {
+//   console.log('workerStart+');
+//   for (;;) {
+//     do {
+//     var message = subReceiveMessage();
+//     if (message) {
+//       console.log("worker.js receive msg:" + message);
+//       break;
+//     }
+//   } while (1);
+//   console.log("worker.js msg received!!! exit while loop!!!");
+//   }  
+// })();
+let _wndId = null;
+// onmessage = (e) => {
+//   if (e.data.eventType === 'initWndId') {
+//     _wndId = e.data.wndId;
+//   }
+// }
 
+self.onmessage = function (msg) {
+  this.console.log('worker received');
+}
